@@ -1,0 +1,165 @@
+/* Base */
+:root {
+    --tile-radius: 16px;
+    --tile-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    --tile-glow: 0 10px 40px rgba(0,0,0,0.18);
+    --label-bg: rgba(0,0,0,0.55);
+    --label-color: #fff;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    color: #111;
+    background: #ffffff;
+    transition: background 420ms ease, background-color 420ms ease;
+}
+
+/* Container sizing: 90% viewport height, width at least 81% of viewport */
+.tiles {
+    height: 100vh;
+    min-width: 81vw;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5vh 2.5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 1.5vmin;
+    width: 100%;
+    height: 100%;
+}
+
+@media (max-width: 820px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 2vmin;
+    }
+}
+
+/* Tile */
+.tile {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--tile-radius);
+    background: #f7f7f7;
+    box-shadow: var(--tile-shadow);
+    text-decoration: none;
+    overflow: hidden;
+    isolation: isolate;
+    transition: transform 240ms ease, box-shadow 240ms ease, filter 240ms ease, opacity 240ms ease;
+}
+
+.tile:hover { transform: translateY(-2px); }
+
+.tile img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 240ms ease, opacity 240ms ease;
+    z-index: 0;
+}
+
+.tile:hover img { transform: scale(1.02); }
+
+.tile .label {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--label-bg);
+    color: var(--label-color);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    font-size: 14px;
+    z-index: 2;
+}
+
+/* Dimming for non-hovered tiles */
+.grid.dim-others .tile { filter: grayscale(0.8) saturate(0.6); opacity: 0.6; }
+.grid.dim-others .tile.is-hovered { filter: none; opacity: 1; box-shadow: var(--tile-glow); }
+
+/* Finnodec starfield (dark purple with subtle stars) */
+.tile.finnodec {
+    background: #2a1147;
+    color: #fff;
+}
+
+.tile.finnodec::before,
+.tile.finnodec::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.9) 50%, transparent 55%),
+        radial-gradient(1.5px 1.5px at 70% 60%, rgba(255,255,255,0.7) 50%, transparent 55%),
+        radial-gradient(1.2px 1.2px at 40% 80%, rgba(255,255,255,0.6) 50%, transparent 55%),
+        radial-gradient(1.2px 1.2px at 85% 25%, rgba(255,255,255,0.5) 50%, transparent 55%),
+        radial-gradient(1.2px 1.2px at 10% 70%, rgba(255,255,255,0.5) 50%, transparent 55%);
+    pointer-events: none;
+    opacity: 0.6;
+    z-index: 1; /* Render stars above image but below label */
+}
+
+.tile.finnodec::after {
+    animation: twinkle 6s ease-in-out infinite;
+    mix-blend-mode: screen;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.65; }
+}
+
+/* Accessibility focus */
+.tile:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+/* Page-wide starfield when Finnodec hovered */
+body.page-stars::before,
+body.page-stars::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1; /* Stay behind content */
+}
+
+body.page-stars::before {
+    /* subtle multi-layer star speckles */
+    background-image:
+        radial-gradient(2px 2px at 12% 22%, rgba(255,255,255,0.9) 50%, transparent 55%),
+        radial-gradient(1.8px 1.8px at 44% 18%, rgba(255,255,255,0.7) 50%, transparent 55%),
+        radial-gradient(1.4px 1.4px at 78% 28%, rgba(255,255,255,0.6) 50%, transparent 55%),
+        radial-gradient(1.4px 1.4px at 26% 66%, rgba(255,255,255,0.5) 50%, transparent 55%),
+        radial-gradient(1.2px 1.2px at 84% 74%, rgba(255,255,255,0.5) 50%, transparent 55%);
+    opacity: 0.5;
+}
+
+body.page-stars::after {
+    animation: twinkle 7s ease-in-out infinite;
+    background-image:
+        radial-gradient(2px 2px at 32% 42%, rgba(255,255,255,0.8) 50%, transparent 55%),
+        radial-gradient(1.6px 1.6px at 64% 58%, rgba(255,255,255,0.6) 50%, transparent 55%),
+        radial-gradient(1.2px 1.2px at 90% 12%, rgba(255,255,255,0.5) 50%, transparent 55%);
+    opacity: 0.4;
+}
+
+

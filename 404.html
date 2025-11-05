@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redirecting…</title>
+  <meta http-equiv="refresh" content="0; url=/" />
+  <script>
+    // GitHub Pages 404 redirect to homepage
+    (function(){
+      var home = '/';
+      if (location.pathname !== '/') {
+        window.location.replace(home);
+      }
+    })();
+  </script>
+  <style>body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:40px;color:#111}</style>
+</head>
+<body>
+  <p>Redirecting to <a href="/">homepage</a>…</p>
+</body>
+</html>
+
+
