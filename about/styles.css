@@ -1,0 +1,431 @@
+/* Base Reset & Typography */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-white: #FFFFFF;
+    --bg-soft-gray: #F7F7F7;
+    --accent-silver-blue: #C8D9E8;
+    --text-black: #000000;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    /* Neue Haas Grotesk equivalent - system fonts with Helvetica Neue fallback */
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 400;
+    font-size: clamp(18px, 2vw, 20px);
+    line-height: 1.6;
+    background: var(--bg-white);
+    color: var(--text-black);
+    overflow-x: hidden;
+    cursor: default;
+    text-transform: lowercase;
+    font-style: normal;
+}
+
+/* Custom Cursor - 50% opacity */
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2" fill="black" opacity="0.5"/></svg>') 12 12, auto;
+}
+
+/* Subtle scale hover effect on interactive elements */
+a, button, .scroll-hint {
+    transition: transform 0.2s ease;
+}
+
+a:hover, button:hover, .scroll-hint:hover {
+    transform: scale(1.02);
+}
+
+/* Background Gradient Drift - very slow, subtle (0.02x speed equivalent) */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-soft-gray) 100%);
+    background-size: 100% 100%;
+    opacity: 0.03;
+    z-index: -1;
+    animation: gradientDrift 600s linear infinite; /* Very slow drift */
+    pointer-events: none;
+    will-change: transform;
+}
+
+@keyframes gradientDrift {
+    0% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(-0.2%, -0.2%) scale(1.001); }
+    50% { transform: translate(-0.4%, 0) scale(1.002); }
+    75% { transform: translate(-0.2%, 0.2%) scale(1.001); }
+    100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Sections */
+.section {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    opacity: 1;
+    transition: opacity 0.8s ease, filter 0.8s ease;
+}
+
+.section.fade-out {
+    opacity: 0.3;
+    filter: blur(4px);
+}
+
+.content {
+    max-width: 720px;
+    width: 100%;
+    padding: 0 5vw;
+    text-align: center;
+    position: relative;
+}
+
+/* Section 1 — Intro */
+.section-intro {
+    background: var(--bg-white);
+}
+
+.intro-name {
+    /* SF Pro Display Light equivalent */
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-size: clamp(48px, 8vw, 120px);
+    font-weight: 300;
+    letter-spacing: 0.02em; /* +2% tracking */
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    text-transform: lowercase;
+    opacity: 0;
+    animation: fadeInUp 1.2s ease 0.3s forwards;
+}
+
+.intro-quote {
+    font-size: clamp(16px, 2.5vw, 24px);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    text-transform: lowercase;
+    font-style: normal;
+    opacity: 0;
+    animation: fadeInUp 1.2s ease 0.6s forwards;
+}
+
+.divider {
+    width: 0;
+    height: 1px;
+    background: var(--accent-silver-blue);
+    margin: 0 auto;
+    opacity: 0;
+    animation: expandDivider 1.5s ease 1s forwards;
+}
+
+@keyframes expandDivider {
+    0% {
+        width: 0;
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        width: 50%;
+        opacity: 1;
+    }
+}
+
+.scroll-hint {
+    margin-top: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-silver-blue);
+    opacity: 0.6;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    animation: float 2s ease-in-out infinite;
+}
+
+.scroll-hint:hover .dot {
+    transform: scale(1.3);
+    opacity: 1;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Section 2 — Origin */
+.section-origin {
+    background: var(--bg-white);
+}
+
+.origin-text {
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 400;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+    font-style: normal;
+}
+
+.origin-text .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.origin-text .word.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Section 3 — Work & Focus */
+.section-work {
+    background: var(--bg-white);
+}
+
+.work-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    align-items: start;
+    text-align: left;
+}
+
+.work-left {
+    text-align: right;
+}
+
+.work-heading {
+    /* SF Pro Display Light equivalent */
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 300;
+    letter-spacing: 0.02em; /* +2% tracking */
+    color: var(--accent-silver-blue);
+    text-transform: lowercase;
+    font-style: normal;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.work-heading.slide-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.work-right {
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s;
+}
+
+.work-right.slide-in {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.work-text {
+    font-size: clamp(18px, 2vw, 20px);
+    font-weight: 400;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-transform: lowercase;
+    letter-spacing: 0.01em;
+    font-style: normal;
+}
+
+/* Section 4 — Vision - warmer gradient on scroll */
+.section-vision {
+    background: linear-gradient(180deg, var(--bg-white) 0%, #FBFBFB 100%);
+    position: relative;
+}
+
+.section-vision::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 250, 245, 0) 0%, rgba(255, 248, 240, 0.3) 100%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.section-vision.in-view::before {
+    opacity: 1;
+}
+
+.section-vision .content {
+    position: relative;
+    z-index: 1;
+}
+
+.vision-main {
+    /* SF Pro Display Light equivalent */
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    font-size: clamp(48px, 6vw, 72px);
+    font-weight: 300;
+    letter-spacing: 0.02em; /* +2% tracking */
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    text-transform: lowercase;
+    font-style: normal;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.vision-main.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.vision-sub {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+    text-transform: lowercase;
+    font-style: normal;
+    opacity: 0;
+    transition: opacity 0.8s ease 0.3s;
+}
+
+.vision-sub.fade-in {
+    opacity: 1;
+}
+
+/* Section 5 — Idle (empty, handled by JS) */
+.section-idle {
+    min-height: 100vh;
+    background: var(--bg-white);
+    cursor: pointer;
+}
+
+/* Fade Out State */
+body.fade-to-white::before {
+    animation: fadeToWhite 3s ease forwards;
+}
+
+body.fade-to-white .section {
+    opacity: 0;
+    transition: opacity 2s ease;
+}
+
+body.fade-to-white {
+    cursor: none;
+}
+
+@keyframes fadeToWhite {
+    to {
+        opacity: 0;
+        background: var(--bg-white);
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .work-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .work-left {
+        text-align: center;
+    }
+
+    .work-heading {
+        transform: translateY(-20px);
+    }
+
+    .work-heading.slide-in {
+        transform: translateY(0);
+    }
+
+    .work-right {
+        transform: translateY(20px);
+    }
+
+    .work-right.slide-in {
+        transform: translateY(0);
+    }
+
+    .content {
+        padding: 0 8vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-name {
+        font-size: 48px;
+    }
+
+    .intro-quote {
+        font-size: 16px;
+    }
+
+    .origin-text {
+        font-size: 18px;
+    }
+
+    .work-text {
+        font-size: 18px;
+    }
+
+    .vision-main {
+        font-size: 36px;
+    }
+}
+
+/* Smooth Scroll Parallax */
+@media (prefers-reduced-motion: no-preference) {
+    .section {
+        will-change: opacity, transform;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
