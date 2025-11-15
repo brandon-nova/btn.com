@@ -20,6 +20,19 @@
 
   tiles.forEach(tile => {
     const color = tile.getAttribute('data-color');
+    
+    // Set text color based on tile background color
+    // For white backgrounds, use sharp grey for contrast
+    // For About tile, use blue text
+    let textColor;
+    if (tile.classList.contains('about')) {
+      textColor = '#0066ff';
+    } else if (color === '#ffffff') {
+      textColor = '#333333';
+    } else {
+      textColor = color;
+    }
+    tile.style.setProperty('--tile-text-color', textColor);
 
     tile.addEventListener('mouseenter', () => {
       grid.classList.add('dim-others');

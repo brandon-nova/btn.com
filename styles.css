@@ -74,7 +74,11 @@ body {
     z-index: 0;
 }
 
-.tile:hover img { transform: scale(1.02); }
+.tile:hover img,
+.tile.is-hovered img { 
+    transform: scale(1.02);
+    opacity: 0.3;
+}
 
 .tile .label {
     position: absolute;
@@ -90,9 +94,40 @@ body {
     z-index: 2;
 }
 
+.tile .description {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: rgba(240, 240, 240, 0.85);
+    color: var(--tile-text-color, #111);
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    font-size: clamp(18px, 4vw, 48px);
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 240ms ease;
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.tile:hover .description,
+.tile.is-hovered .description {
+    opacity: 1;
+}
+
 /* Dimming for non-hovered tiles */
 .grid.dim-others .tile { filter: grayscale(0.8) saturate(0.6); opacity: 0.6; }
 .grid.dim-others .tile.is-hovered { filter: none; opacity: 1; box-shadow: var(--tile-glow); }
+
+/* About tile - white text */
+.tile.about .description {
+    background: rgba(240, 240, 240, 0.85);
+}
 
 /* Finnodec starfield (dark purple with subtle stars) */
 .tile.finnodec {
