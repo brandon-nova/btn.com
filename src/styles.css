@@ -76,7 +76,7 @@ body {
   position: relative;
   flex: 1;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   min-height: 100vh;
   min-height: 100dvh;
@@ -119,14 +119,23 @@ body {
 .star {
   position: absolute;
   border-radius: 50%;
-  background: #fff;
-  will-change: transform;
+  background: rgba(232, 242, 255, 0.95);
+  box-shadow: 0 0 8px rgba(233, 243, 255, 0.8);
+  opacity: var(--star-bright, 0.8);
+  will-change: transform, opacity;
   animation: twinkle 6.6s ease-in-out infinite alternate;
 }
 
 @keyframes twinkle {
-  0% { opacity: var(--star-dim, 0.08); }
-  100% { opacity: var(--star-bright, 0.3); }
+  0% {
+    opacity: var(--star-dim, 0.24);
+  }
+  50% {
+    opacity: calc((var(--star-dim, 0.24) + var(--star-bright, 0.88)) * 0.5);
+  }
+  100% {
+    opacity: var(--star-bright, 0.88);
+  }
 }
 
 /* ── Writing layer ── */
@@ -216,9 +225,11 @@ body {
 .hero-content {
   position: relative;
   z-index: 2;
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
   text-align: center;
   padding: 0 1rem clamp(2.5rem, 5vh, 4rem);
 }
@@ -232,34 +243,37 @@ body {
 /* ── Pill tabs ── */
 .pill-shell {
   display: flex;
-  gap: 0.25rem;
-  background: rgba(255, 255, 255, 0.08);
+  gap: 0.4rem;
+  background: #ffffff;
   border-radius: 999px;
-  padding: 0.2rem;
+  padding: 0.35rem;
+  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
 }
 
 .pill-item {
-  background: none;
+  background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(0, 0, 0, 0.65);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 300;
+  font-size: 0.75rem;
+  font-weight: 400;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.3rem 0.85rem;
+  letter-spacing: 0.12em;
+  padding: 0.48rem 1.2rem;
   border-radius: 999px;
   cursor: pointer;
-  transition: background 200ms ease, color 200ms ease;
+  transition: all 220ms ease;
 }
 
 .pill-item:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .pill-item.selected {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.92);
+  color: #ffffff;
+  font-weight: 500;
 }
 
 /* ── CTA link ── */

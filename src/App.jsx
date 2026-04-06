@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { slides } from "./data/slides";
 import { writingPassage } from "./data/writingPassage";
 
@@ -11,8 +11,8 @@ function makeStars(count) {
     x: Math.random() * 100,
     y: Math.random() * 100,
     size: 1.5 + Math.random() * 2.5,
-    baseOpacity: 0.08 + Math.random() * 0.18,
-    twinkleDuration: 3 + Math.random() * 5,
+    baseOpacity: 0.32 + Math.random() * 0.28,
+    twinkleDuration: 3.8 + Math.random() * 4.2,
     twinkleDelay: Math.random() * 6
   }));
 }
