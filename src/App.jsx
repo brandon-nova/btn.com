@@ -56,10 +56,15 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [missionOpen, setMissionOpen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
+  const [dragOffset, setDragOffset] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
   const autoTimerRef = useRef(null);
   const closeButtonRef = useRef(null);
   const aboutLayerRef = useRef(null);
   const pointerFrameRef = useRef(0);
+  const pillShellRef = useRef(null);
+  const pillItemRefs = useRef([]);
+  const dragStartRef = useRef({ x: 0, index: 0 });
   const activeSlide = slides[activeIndex];
   const aboutStars = useMemo(() => makeStars(STAR_COUNT), []);
   const fragmentTimings = useMemo(
@@ -195,6 +200,88 @@ function App() {
     };
   }, []);
 
+  // Force re-render after mount so indicator gets initial position
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  function getIndicatorStyle() {
+    if (!mounted) return { opacity: 0 };
+    const el = pillItemRefs.current[activeIndex];
+    if (!el) return { opacity: 0 };
+    const shell = pillShellRef.current;
+    if (!shell) return { opacity: 0 };
+    const shellRect = shell.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    const left = elRect.left - shellRect.left;
+    const top = elRect.top - shellRect.top;
+    return {
+      width: elRect.width,
+      height: elRect.height,
+      transform: `translate(${left + dragOffset}px, ${top}px)`,
+      transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+      opacity: 1
+    };
+  }
+
+  function handleShellPointerDown(event) {
+    // Only start drag, don't interfere with clicks
+    const shell = pillShellRef.current;
+    if (!shell) return;
+    event.preventDefault();
+    setIsDragging(true);
+    dragStartRef.current = { x: event.clientX, index: activeIndex };
+    setDragOffset(0);
+
+    function onMove(e) {
+      const dx = e.clientX - dragStartRef.current.x;
+
+      // Clamp drag to shell bounds
+      const shellRect = shell.getBoundingClientRect();
+      const firstEl = pillItemRefs.current[0];
+      const lastEl = pillItemRefs.current[slides.length - 1];
+      if (!firstEl || !lastEl) return;
+      const currentEl = pillItemRefs.current[dragStartRef.current.index];
+      const currentLeft = currentEl.getBoundingClientRect().left - shellRect.left;
+      const minX = (firstEl.getBoundingClientRect().left - shellRect.left) - currentLeft;
+      const maxX = (lastEl.getBoundingClientRect().left - shellRect.left) - currentLeft;
+      setDragOffset(Math.max(minX, Math.min(maxX, dx)));
+    }
+
+    function onUp(e) {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      setIsDragging(false);
+      setDragOffset(0);
+
+      // Find closest pill to where indicator ended up
+      const shellRect = shell.getBoundingClientRect();
+      const currentEl = pillItemRefs.current[dragStartRef.current.index];
+      const currentCenter = currentEl.getBoundingClientRect().left + currentEl.getBoundingClientRect().width / 2 - shellRect.left;
+      const dx = e.clientX - dragStartRef.current.x;
+      const dropCenter = currentCenter + dx;
+
+      let closest = 0;
+      let closestDist = Infinity;
+      slides.forEach((_, i) => {
+        const el = pillItemRefs.current[i];
+        if (!el) return;
+        const elCenter = el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2 - shellRect.left;
+        const dist = Math.abs(elCenter - dropCenter);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = i;
+        }
+      });
+
+      if (closest !== dragStartRef.current.index) {
+        selectSlide(closest);
+      }
+    }
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+  }
+
   return (
     <>
       <div className={`site-shell slide-${activeSlide.visual}`}>
@@ -290,7 +377,17 @@ function App() {
             <div className="hero-content">
               <p className="explanatory-text">{activeSlide.explanatory}</p>
 
-              <div className="pill-shell" role="tablist" aria-label="Sections">
+              <div
+                className="pill-shell"
+                role="tablist"
+                aria-label="Sections"
+                ref={pillShellRef}
+                onPointerDown={handleShellPointerDown}
+              >
+                <div
+                  className="pill-indicator"
+                  style={getIndicatorStyle()}
+                />
                 {slides.map((slide, index) => {
                   const selected = index === activeIndex;
                   return (
@@ -300,6 +397,7 @@ function App() {
                       role="tab"
                       aria-selected={selected}
                       className={`pill-item ${selected ? "selected" : ""}`}
+                      ref={(el) => { pillItemRefs.current[index] = el; }}
                       onClick={() => selectSlide(index)}
                     >
                       <span>{slide.label}</span>
