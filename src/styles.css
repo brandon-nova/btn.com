@@ -1,0 +1,435 @@
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "IBM Plex Mono", Consolas, monospace;
+}
+
+html,
+body {
+  height: 100%;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Shell ── */
+.site-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ── Top bar ── */
+.site-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem clamp(1rem, 3vw, 2rem);
+}
+
+.brand-mark img {
+  height: clamp(1.6rem, 3vw, 2.2rem);
+  width: auto;
+  display: block;
+}
+
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0.4rem;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 1px;
+  transition: background 200ms ease;
+}
+
+.menu-toggle:hover span {
+  background: #fff;
+}
+
+/* ── Hero / Slide area ── */
+.hero {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.slide-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.about-layer,
+.writing-layer,
+.venture-layer {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 800ms ease;
+}
+
+.slide-about .about-layer,
+.slide-writing .writing-layer,
+.slide-venture .venture-layer {
+  opacity: 1;
+}
+
+.about-layer {
+  background:
+    radial-gradient(circle at 16% 18%, rgba(62, 96, 170, 0.12) 0%, rgba(62, 96, 170, 0) 36%),
+    radial-gradient(circle at 82% 10%, rgba(86, 118, 196, 0.09) 0%, rgba(86, 118, 196, 0) 40%),
+    linear-gradient(180deg, #020716 0%, #04102a 54%, #07163a 100%);
+}
+
+/* ── Starfield ── */
+.starfield {
+  position: absolute;
+  inset: 0;
+}
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  will-change: transform;
+  animation: twinkle 6.6s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0% { opacity: var(--star-dim, 0.08); }
+  100% { opacity: var(--star-bright, 0.3); }
+}
+
+/* ── Writing layer ── */
+.writing-layer {
+  overflow: hidden;
+  background: linear-gradient(180deg, #100f14 0%, #1d1a24 100%);
+}
+
+.writing-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.78) 76%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.writing-wall {
+  position: absolute;
+  inset: 0;
+  padding: clamp(1.5rem, 3vw, 3rem) clamp(1.25rem, 4vw, 3rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  justify-content: center;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(0.85rem, 1.6vw, 1.3rem);
+  line-height: 2.8;
+  overflow: hidden;
+}
+
+.writing-fragment {
+  color: transparent;
+  margin: 0 0.3em;
+  animation: fragmentBreathe 8s ease-in-out infinite;
+}
+
+.writing-fragment::after {
+  content: " \00b7 ";
+  color: rgba(255, 255, 255, 0.06);
+}
+
+.writing-fragment:last-child::after {
+  content: "";
+}
+
+@keyframes fragmentBreathe {
+  0%, 100% { color: transparent; }
+  20% { color: rgba(244, 245, 255, 0.65); }
+  35% { color: rgba(244, 245, 255, 0.55); }
+  50% { color: transparent; }
+}
+
+@media (max-width: 760px) {
+  .writing-wall {
+    font-size: clamp(0.7rem, 2.8vw, 0.95rem);
+    line-height: 2.4;
+    padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
+  }
+
+  .writing-fragment:nth-child(n+28) {
+    display: none;
+  }
+}
+
+/* ── Venture layer ── */
+.venture-layer {
+  background: #000;
+}
+
+.venture-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.5) 80%);
+  pointer-events: none;
+}
+
+.venture-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Hero content ── */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0 1rem clamp(2.5rem, 5vh, 4rem);
+}
+
+.explanatory-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 3vw, 2.8rem);
+  font-weight: 400;
+}
+
+/* ── Pill tabs ── */
+.pill-shell {
+  display: flex;
+  gap: 0.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 0.2rem;
+}
+
+.pill-item {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.3rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 200ms ease, color 200ms ease;
+}
+
+.pill-item:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.pill-item.selected {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+/* ── CTA link ── */
+.slide-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.slide-cta:hover {
+  color: #fff;
+}
+
+.cta-arrow {
+  font-size: 0.65rem;
+  transition: transform 200ms ease;
+}
+
+.slide-cta:hover .cta-arrow {
+  transform: translateX(3px);
+}
+
+/* ── Footer ── */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.25rem, 4vw, 3rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-right: auto;
+}
+
+.footer-brand img {
+  height: 1.4rem;
+  width: auto;
+}
+
+.footer-brand p {
+  font-family: var(--font-serif);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.footer-column h2 {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 0.2rem;
+}
+
+.footer-column a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.footer-column a:hover {
+  color: #fff;
+}
+
+/* ── Menu overlay ── */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-close {
+  position: absolute;
+  top: 0.75rem;
+  right: clamp(1rem, 3vw, 2rem);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.4rem;
+  transition: color 200ms ease;
+}
+
+.menu-close:hover {
+  color: #fff;
+}
+
+.overlay-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.2rem, 3vw, 2rem);
+}
+
+.overlay-nav a {
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 200ms ease;
+}
+
+.overlay-nav a:hover {
+  color: #fff;
+}
+
+.overlay-nav a[aria-disabled="true"] {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 760px) {
+  .site-topbar {
+    padding: 0.6rem 1rem;
+  }
+
+  .hero-content {
+    padding-bottom: 2rem;
+  }
+
+  .site-footer {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .footer-brand {
+    margin-right: 0;
+  }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .star {
+    animation: none;
+    opacity: var(--star-bright, 0.3);
+  }
+
+  .writing-fragment {
+    animation: none;
+    color: rgba(244, 245, 255, 0.3);
+  }
+}

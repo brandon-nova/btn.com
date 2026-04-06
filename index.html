@@ -1,64 +1,21 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brandon Nova</title>
+    <meta name="description" content="A quiet digital museum of self.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./styles.css">
-    <link rel="icon" href="./images/BTN.png" type="image/png" sizes="32x32">
-    <link rel="icon" href="./images/BTN.png" type="image/png" sizes="192x192">
-    <link rel="apple-touch-icon" href="./images/BTN.png">
-    <link rel="shortcut icon" href="./images/BTN.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="icon" href="/images/BTN.png" type="image/png" sizes="32x32">
+    <link rel="icon" href="/images/BTN.png" type="image/png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/images/BTN.png">
+    <link rel="shortcut icon" href="/images/BTN.png" type="image/png">
 </head>
 <body>
-    <main class="tiles" aria-label="Main navigation tiles">
-        <div class="grid">
-            <!-- Row 1 -->
-            <a class="tile about" data-color="#0066ff" href="./about/" data-title="About">
-                <img src="./images/BTN.png" alt="About" />
-                <span class="label">About</span>
-                <span class="description">About me</span>
-            </a>
-            <a class="tile" data-color="#d3d3d3" href="https://dev.brandontnova.com" data-title="Dev">
-                <img src="./images/DEV.png" alt="Dev" />
-                <span class="label">Dev</span>
-                <span class="description">Career Portfolio</span>
-            </a>
-            <a class="tile" data-color="#ff7a00" href="https://venture.brandontnova.com" data-title="Venture">
-                <img src="./images/NVO.png" alt="Venture" />
-                <span class="label">Venture</span>
-                <span class="description">Projects and Ideas</span>
-            </a>
-
-            <!-- Row 2 -->
-            <a class="tile" data-color="#2ad1c9" href="https://mldiscord.com" data-title="ML">
-                <img src="./images/MLD.png" alt="ML" />
-                <span class="label">ML</span>
-                <span class="description">Machine Learning Projects</span>
-            </a>
-            <a class="tile finnodec" data-color="#2a1147" href="https://finnodec.com" data-title="Finnodec">
-                <img src="./images/FDI.png" alt="Finnodec" />
-                <span class="label">Finnodec</span>
-                <span class="description">Investments</span>
-            </a>
-            <a class="tile" data-color="#ffd300" href="https://novcreative.com" data-title="Creative">
-                <img src="./images/NVC.png" alt="Creative" />
-                <span class="label">Creative</span>
-                <span class="description">My Creativity :)</span>
-            </a>
-        </div>
-    </main>
-
-    <script src="./script.js"></script>
-    <noscript>
-        JavaScript is required for hover effects. Links still work without it.
-    </noscript>
-    
+    <div id="root"></div>
+    <noscript>JavaScript is required for BTN Site 3.0.</noscript>
+    <script type="module" src="/src/main.jsx"></script>
 </body>
-<!-- The images referenced should be placed in ./images/ -->
 </html>
-
-
