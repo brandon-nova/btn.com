@@ -119,23 +119,26 @@ body {
 .star {
   position: absolute;
   border-radius: 50%;
-  background: rgba(232, 242, 255, 0.95);
-  box-shadow: 0 0 8px rgba(233, 243, 255, 0.8);
-  opacity: var(--star-bright, 0.8);
   will-change: transform, opacity;
-  animation: twinkle 6.6s ease-in-out infinite alternate;
+  animation: twinkle 6s ease-in-out infinite alternate;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.star-bright {
+  animation: twinkleBright 4s ease-in-out infinite alternate;
 }
 
 @keyframes twinkle {
-  0% {
-    opacity: var(--star-dim, 0.24);
-  }
-  50% {
-    opacity: calc((var(--star-dim, 0.24) + var(--star-bright, 0.88)) * 0.5);
-  }
-  100% {
-    opacity: var(--star-bright, 0.88);
-  }
+  0% { opacity: var(--star-dim, 0.05); }
+  40% { opacity: calc((var(--star-dim) + var(--star-bright)) * 0.5); }
+  100% { opacity: var(--star-bright, 0.2); }
+}
+
+@keyframes twinkleBright {
+  0% { opacity: var(--star-dim, 0.3); }
+  30% { opacity: var(--star-bright, 0.9); }
+  60% { opacity: calc(var(--star-bright) * 0.7); }
+  100% { opacity: var(--star-bright, 0.9); }
 }
 
 /* ── Writing layer ── */
@@ -209,7 +212,7 @@ body {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.5) 80%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.55) 50%, rgba(0, 0, 0, 0.7) 100%);
   pointer-events: none;
 }
 
@@ -236,44 +239,44 @@ body {
 
 .explanatory-text {
   font-family: var(--font-serif);
-  font-size: clamp(1.35rem, 3vw, 2.8rem);
+  font-size: clamp(1.1rem, 2.2vw, 2rem);
   font-weight: 400;
 }
 
 /* ── Pill tabs ── */
 .pill-shell {
   display: flex;
-  gap: 0.4rem;
-  background: #ffffff;
+  gap: 0.3rem;
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
-  padding: 0.35rem;
-  box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+  padding: 0.4rem;
 }
 
 .pill-item {
-  background: transparent;
+  background: none;
   border: none;
-  color: rgba(0, 0, 0, 0.65);
+  color: rgba(255, 255, 255, 0.55);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 400;
+  font-size: 0.88rem;
+  font-weight: 300;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 0.48rem 1.2rem;
+  letter-spacing: 0.1em;
+  padding: 0.65rem 1.8rem;
   border-radius: 999px;
   cursor: pointer;
-  transition: all 220ms ease;
+  transition: background 200ms ease, color 200ms ease;
 }
 
 .pill-item:hover {
-  color: rgba(0, 0, 0, 0.9);
-  background: rgba(0, 0, 0, 0.04);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .pill-item.selected {
-  background: rgba(0, 0, 0, 0.92);
-  color: #ffffff;
-  font-weight: 500;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
 }
 
 /* ── CTA link ── */
@@ -410,19 +413,116 @@ body {
   color: #fff;
 }
 
-.overlay-nav a[aria-disabled="true"] {
-  opacity: 0.3;
-  pointer-events: none;
+.overlay-nav-button {
+  background: none;
+  border: none;
+  font-family: var(--font-serif);
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: color 200ms ease;
+}
+
+.overlay-nav-button:hover {
+  color: #fff;
+}
+
+/* ── Mission modal ── */
+.mission-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: missionBgIn 0.6s ease forwards;
+}
+
+.mission-content {
+  text-align: center;
+  max-width: 680px;
+  padding: 0 2rem;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  animation: missionContentIn 0.8s ease 0.2s forwards;
+}
+
+.mission-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 3.5vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.35;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.mission-close {
+  margin-top: 2.5rem;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  transition: color 200ms ease, border-color 200ms ease;
+}
+
+.mission-close:hover {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+@keyframes missionBgIn {
+  to { background: rgba(0, 0, 0, 0.92); }
+}
+
+@keyframes missionContentIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ── Responsive ── */
-@media (max-width: 760px) {
+@media (max-width: 728px) {
   .site-topbar {
     padding: 0.6rem 1rem;
   }
 
   .hero-content {
     padding-bottom: 2rem;
+  }
+
+  .pill-shell {
+    flex-direction: column;
+    border-radius: 1rem;
+    gap: 0.2rem;
+  }
+
+  .pill-item {
+    text-align: center;
+  }
+
+  .venture-video {
+    display: none;
+  }
+
+  .venture-layer {
+    background: linear-gradient(
+      145deg,
+      #1a1712 0%,
+      #1f1b14 25%,
+      #221d15 50%,
+      #1e1a13 75%,
+      #19160f 100%
+    );
   }
 
   .site-footer {

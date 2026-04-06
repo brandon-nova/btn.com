@@ -3,18 +3,38 @@ import { slides } from "./data/slides";
 import { writingPassage } from "./data/writingPassage";
 
 const AUTO_ADVANCE_MS = 9000;
-const STAR_COUNT = 48;
+const STAR_COUNT = 180;
+
+const STAR_COLORS = [
+  "rgba(255, 255, 255,",       // white
+  "rgba(200, 220, 255,",       // blue-white
+  "rgba(170, 200, 255,",       // cool blue
+  "rgba(255, 240, 220,",       // warm white
+  "rgba(255, 210, 180,",       // orange tint
+];
 
 function makeStars(count) {
-  return Array.from({ length: count }, (_, index) => ({
-    id: `star-${index}`,
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: 1.5 + Math.random() * 2.5,
-    baseOpacity: 0.32 + Math.random() * 0.28,
-    twinkleDuration: 3.8 + Math.random() * 4.2,
-    twinkleDelay: Math.random() * 6
-  }));
+  return Array.from({ length: count }, (_, index) => {
+    const rand = Math.random();
+    // most stars are tiny, few are bright — realistic distribution
+    const isBright = rand > 0.92;
+    const isMedium = rand > 0.7 && rand <= 0.92;
+    const size = isBright ? 2.2 + Math.random() * 1.8 : isMedium ? 1.2 + Math.random() * 1 : 0.6 + Math.random() * 0.8;
+    const baseOpacity = isBright ? 0.6 + Math.random() * 0.3 : isMedium ? 0.25 + Math.random() * 0.2 : 0.08 + Math.random() * 0.15;
+    const color = STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)];
+
+    return {
+      id: `star-${index}`,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size,
+      baseOpacity,
+      color,
+      isBright,
+      twinkleDuration: isBright ? 2.5 + Math.random() * 3 : 4 + Math.random() * 6,
+      twinkleDelay: Math.random() * 8
+    };
+  });
 }
 
 function buildLinkProps(slide) {
@@ -34,6 +54,7 @@ function buildLinkProps(slide) {
 function App() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [missionOpen, setMissionOpen] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: -100, y: -100 });
   const autoTimerRef = useRef(null);
   const closeButtonRef = useRef(null);
@@ -208,15 +229,16 @@ function App() {
                     const dx = star.x - cursorPosition.x;
                     const dy = star.y - cursorPosition.y;
                     const distance = Math.hypot(dx, dy);
-                    const influence = Math.max(0, 1 - distance / 18);
-                    const opacity = Math.min(1, star.baseOpacity + influence * 0.65);
-                    const dimOpacity = Math.max(0.08, opacity * 0.45);
-                    const scale = 1 + influence * 0.35;
+                    const influence = Math.max(0, 1 - distance / 22);
+                    const opacity = Math.min(1, star.baseOpacity + influence * 0.85);
+                    const dimOpacity = Math.max(0.04, star.baseOpacity * 0.4);
+                    const scale = 1 + influence * 0.6;
+                    const glowSize = star.isBright ? Math.round(4 + influence * 8) : Math.round(2 + influence * 4);
 
                     return (
                       <span
                         key={star.id}
-                        className="star"
+                        className={`star${star.isBright ? " star-bright" : ""}`}
                         style={{
                           left: `${star.x}%`,
                           top: `${star.y}%`,
@@ -224,6 +246,8 @@ function App() {
                           height: `${star.size}px`,
                           "--star-dim": dimOpacity,
                           "--star-bright": opacity,
+                          background: `${star.color} ${opacity})`,
+                          boxShadow: `0 0 ${glowSize}px ${star.color} ${opacity * 0.6})`,
                           transform: `translate(-50%, -50%) scale(${scale})`,
                           animationDuration: `${star.twinkleDuration}s`,
                           animationDelay: `${star.twinkleDelay}s`
@@ -341,10 +365,37 @@ function App() {
               Portfolio
             </a>
             <a href="/about/">About</a>
-            <a href="#" onClick={(event) => event.preventDefault()} aria-disabled="true">
-              Manifesto
-            </a>
+            <button
+              type="button"
+              className="overlay-nav-button"
+              onClick={() => { setMenuOpen(false); setMissionOpen(true); }}
+            >
+              Mission
+            </button>
           </nav>
+        </div>
+      ) : null}
+
+      {missionOpen ? (
+        <div
+          className="mission-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mission statement"
+          onMouseDown={(event) => { if (event.target === event.currentTarget) setMissionOpen(false); }}
+        >
+          <div className="mission-content">
+            <p className="mission-text">
+              Enable everyone through the creation of tools and systems, free access of knowledge and skills, and discovery of will to power
+            </p>
+            <button
+              type="button"
+              className="mission-close"
+              onClick={() => setMissionOpen(false)}
+            >
+              Close
+            </button>
+          </div>
         </div>
       ) : null}
     </>
