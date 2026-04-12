@@ -456,7 +456,7 @@ function App() {
             onClick={() => setMenuOpen(false)}
             ref={closeButtonRef}
           >
-            x
+            ×
           </button>
           <nav className="overlay-nav" aria-label="Overlay navigation">
             <a href="https://venture.brandontnova.com" target="_blank" rel="noopener noreferrer">
